@@ -5,29 +5,29 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>Godot</string>
+	<string>AtlantisPlaySlotCreator</string>
 	<key>CFBundleName</key>
-	<string>Godot</string>
+	<string>AtlantisPlay Slot Creator</string>
 	<key>CFBundleGetInfoString</key>
-	<string>(c) 2007-2019 Juan Linietsky, Ariel Manzur &amp; Godot Engine contributors</string>
+	<string>(c) 2019 AtlantisPlay</string>
 	<key>CFBundleIconFile</key>
-	<string>Godot.icns</string>
+	<string>Atlantis.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.godotengine.godot</string>
+	<string>org.atlantisplay.creator</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>3.2</string>
+	<string>1.0</string>
 	<key>CFBundleSignature</key>
-	<string>godot</string>
+	<string>atlantisplay</string>
 	<key>CFBundleVersion</key>
-	<string>3.2</string>
+	<string>1.0</string>
 	<key>NSRequiresAquaSystemAppearance</key>
     	<false />
 	<key>NSHumanReadableCopyright</key>
-	<string>© 2007-2019 Juan Linietsky, Ariel Manzur &amp; Godot Engine contributors</string>
+	<string>© 2019 AtlantisPlay</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>10.9.0</string>
 	<key>LSMinimumSystemVersionByArchitecture</key>
