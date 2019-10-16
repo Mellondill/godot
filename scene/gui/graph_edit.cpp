@@ -276,6 +276,11 @@ void GraphEdit::_notification(int p_what) {
 	if (p_what == NOTIFICATION_ENTER_TREE || p_what == NOTIFICATION_THEME_CHANGED) {
 		port_grab_distance_horizontal = get_constant("port_grab_distance_horizontal");
 		port_grab_distance_vertical = get_constant("port_grab_distance_vertical");
+
+		zoom_minus->set_icon(get_icon("minus"));
+		zoom_reset->set_icon(get_icon("reset"));
+		zoom_plus->set_icon(get_icon("more"));
+		snap_button->set_icon(get_icon("snap"));
 	}
 	if (p_what == NOTIFICATION_READY) {
 		Size2 hmin = h_scroll->get_combined_minimum_size();
@@ -290,11 +295,6 @@ void GraphEdit::_notification(int p_what) {
 		h_scroll->set_anchor_and_margin(MARGIN_RIGHT, ANCHOR_END, 0);
 		h_scroll->set_anchor_and_margin(MARGIN_TOP, ANCHOR_END, -hmin.height);
 		h_scroll->set_anchor_and_margin(MARGIN_BOTTOM, ANCHOR_END, 0);
-
-		zoom_minus->set_icon(get_icon("minus"));
-		zoom_reset->set_icon(get_icon("reset"));
-		zoom_plus->set_icon(get_icon("more"));
-		snap_button->set_icon(get_icon("snap"));
 	}
 	if (p_what == NOTIFICATION_DRAW) {
 
@@ -776,10 +776,16 @@ void GraphEdit::_top_layer_draw() {
 		_draw_cos_line(top_layer, pos, topos, col, col);
 	}
 
-	if (box_selecting)
+	if (box_selecting) {
 		top_layer->draw_rect(
 				box_selecting_rect,
-				get_color("accent_color", "Editor") * Color(1, 1, 1, 0.375));
+				get_color("box_selection_fill_color", "Editor"));
+
+		top_layer->draw_rect(
+				box_selecting_rect,
+				get_color("box_selection_stroke_color", "Editor"),
+				false);
+	}
 }
 
 void GraphEdit::set_selected(Node *p_child) {

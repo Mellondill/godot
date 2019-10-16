@@ -271,7 +271,7 @@ MonoString *godot_icall_Internal_SimplifyGodotPath(MonoString *p_path) {
 MonoBoolean godot_icall_Internal_IsOsxAppBundleInstalled(MonoString *p_bundle_id) {
 #ifdef OSX_ENABLED
 	String bundle_id = GDMonoMarshal::mono_string_to_godot(p_bundle_id);
-	return (MonoBoolean)osx_is_app_bundle_installed;
+	return (MonoBoolean)osx_is_app_bundle_installed(bundle_id);
 #else
 	(void)p_bundle_id; // UNUSED
 	return (MonoBoolean) false;
@@ -429,6 +429,7 @@ void register_editor_internal_calls() {
 	mono_add_internal_call("GodotTools.Internals.Internal::internal_ScriptEditorEdit", (void *)godot_icall_Internal_ScriptEditorEdit);
 	mono_add_internal_call("GodotTools.Internals.Internal::internal_EditorNodeShowScriptScreen", (void *)godot_icall_Internal_EditorNodeShowScriptScreen);
 	mono_add_internal_call("GodotTools.Internals.Internal::internal_GetScriptsMetadataOrNothing", (void *)godot_icall_Internal_GetScriptsMetadataOrNothing);
+	mono_add_internal_call("GodotTools.Internals.Internal::internal_MonoWindowsInstallRoot", (void *)godot_icall_Internal_MonoWindowsInstallRoot);
 	mono_add_internal_call("GodotTools.Internals.Internal::internal_EditorRunPlay", (void *)godot_icall_Internal_EditorRunPlay);
 	mono_add_internal_call("GodotTools.Internals.Internal::internal_EditorRunStop", (void *)godot_icall_Internal_EditorRunStop);
 	mono_add_internal_call("GodotTools.Internals.Internal::internal_ScriptEditorDebugger_ReloadScripts", (void *)godot_icall_Internal_ScriptEditorDebugger_ReloadScripts);

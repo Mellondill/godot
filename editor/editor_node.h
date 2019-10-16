@@ -178,8 +178,12 @@ private:
 		RUN_DEBUG_NAVIGATION,
 		RUN_DEPLOY_REMOTE_DEBUG,
 		RUN_RELOAD_SCRIPTS,
+		RUN_VCS_SETTINGS,
+		RUN_VCS_SHUT_DOWN,
 		SETTINGS_UPDATE_CONTINUOUSLY,
 		SETTINGS_UPDATE_WHEN_CHANGED,
+		SETTINGS_UPDATE_ALWAYS,
+		SETTINGS_UPDATE_CHANGES,
 		SETTINGS_UPDATE_SPINNER_HIDE,
 		SETTINGS_PREFERENCES,
 		SETTINGS_LAYOUT_SAVE,
@@ -206,6 +210,9 @@ private:
 		HELP_ABOUT,
 
 		SET_VIDEO_DRIVER_SAVE_AND_RESTART,
+
+		GLOBAL_NEW_WINDOW,
+		GLOBAL_SCENE,
 
 		IMPORT_PLUGIN_BASE = 100,
 
@@ -319,6 +326,7 @@ private:
 	EditorSettingsDialog *settings_config_dialog;
 	RunSettingsDialog *run_settings_dialog;
 	ProjectSettingsEditor *project_settings;
+	PopupMenu *vcs_actions_menu;
 	EditorFileDialog *file;
 	ExportTemplateManager *export_template_manager;
 	EditorFeatureProfileManager *feature_profile_manager;
@@ -474,6 +482,7 @@ private:
 	void _get_scene_metadata(const String &p_file);
 	void _update_title();
 	void _update_scene_tabs();
+	void _version_control_menu_option(int p_idx);
 	void _close_messages();
 	void _show_messages();
 	void _vp_resized();
@@ -504,6 +513,7 @@ private:
 	void _add_to_recent_scenes(const String &p_scene);
 	void _update_recent_scenes();
 	void _open_recent_scene(int p_idx);
+	void _global_menu_action(const Variant &p_id, const Variant &p_meta);
 	void _dropped_files(const Vector<String> &p_files, int p_screen);
 	void _add_dropped_files_recursive(const Vector<String> &p_files, String to_path);
 	String _recent_scene;
@@ -629,13 +639,6 @@ private:
 	static int build_callback_count;
 	static EditorBuildCallback build_callbacks[MAX_BUILD_CALLBACKS];
 
-	bool _dimming;
-	float _dim_time;
-	Timer *_dim_timer;
-
-	void _start_dimming(bool p_dimming);
-	void _dim_timeout();
-
 	void _license_tree_selected();
 
 	void _update_update_spinner();
@@ -745,6 +748,7 @@ public:
 
 	void fix_dependencies(const String &p_for_file);
 	void clear_scene() { _cleanup_scene(); }
+	int new_scene();
 	Error load_scene(const String &p_scene, bool p_ignore_broken_deps = false, bool p_set_inherited = false, bool p_clear_errors = true, bool p_force_open_imported = false);
 	Error load_resource(const String &p_resource, bool p_ignore_broken_deps = false);
 
@@ -844,7 +848,7 @@ public:
 	void save_scene_list(Vector<String> p_scene_filenames);
 	void restart_editor();
 
-	void dim_editor(bool p_dimming);
+	void dim_editor(bool p_dimming, bool p_force_dim = false);
 
 	void edit_current() { _edit_current(); };
 

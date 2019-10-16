@@ -164,6 +164,7 @@ bool FindReplaceBar::_search(uint32_t p_flags, int p_from_line, int p_from_col) 
 
 		_update_results_count();
 	} else {
+		results_count = 0;
 		result_line = -1;
 		result_col = -1;
 		text_edit->set_search_text("");
@@ -196,7 +197,7 @@ void FindReplaceBar::_replace() {
 void FindReplaceBar::_replace_all() {
 
 	text_edit->disconnect("text_changed", this, "_editor_text_changed");
-	// line as x so it gets priority in comparison, column as y
+	// Line as x so it gets priority in comparison, column as y.
 	Point2i orig_cursor(text_edit->cursor_get_line(), text_edit->cursor_get_column());
 	Point2i prev_match = Point2(-1, -1);
 
@@ -228,7 +229,7 @@ void FindReplaceBar::_replace_all() {
 			Point2i match_to(result_line, result_col + search_text_len);
 
 			if (match_from < prev_match) {
-				break; // done
+				break; // Done.
 			}
 
 			prev_match = Point2i(result_line, result_col + replace_text.length());
@@ -241,14 +242,14 @@ void FindReplaceBar::_replace_all() {
 					continue;
 				}
 
-				// replace but adjust selection bounds
+				// Replace but adjust selection bounds.
 				text_edit->insert_text_at_cursor(replace_text);
 				if (match_to.x == selection_end.x) {
 					selection_end.y += replace_text.length() - search_text_len;
 				}
 
 			} else {
-				// just replace
+				// Just replace.
 				text_edit->insert_text_at_cursor(replace_text);
 			}
 
@@ -260,12 +261,12 @@ void FindReplaceBar::_replace_all() {
 
 	replace_all_mode = false;
 
-	// restore editor state (selection, cursor, scroll)
+	// Restore editor state (selection, cursor, scroll).
 	text_edit->cursor_set_line(orig_cursor.x);
 	text_edit->cursor_set_column(orig_cursor.y);
 
 	if (selection_enabled && is_selection_only()) {
-		// reselect
+		// Reselect.
 		text_edit->select(selection_begin.x, selection_begin.y, selection_end.x, selection_end.y);
 	} else {
 		text_edit->deselect();
@@ -363,16 +364,14 @@ bool FindReplaceBar::search_prev() {
 	int line, col;
 	_get_search_from(line, col);
 	if (text_edit->is_selection_active())
-		col--; //Skip currently selected word.
+		col--; // Skip currently selected word.
 
-	if (line == result_line && col == result_col) {
-		col -= text.length();
-		if (col < 0) {
-			line -= 1;
-			if (line < 0)
-				line = text_edit->get_line_count() - 1;
-			col = text_edit->get_line(line).length();
-		}
+	col -= text.length();
+	if (col < 0) {
+		line -= 1;
+		if (line < 0)
+			line = text_edit->get_line_count() - 1;
+		col = text_edit->get_line(line).length();
 	}
 
 	return _search(flags, line, col);
@@ -751,7 +750,7 @@ void CodeTextEditor::_zoom_changed() {
 }
 
 void CodeTextEditor::_reset_zoom() {
-	Ref<DynamicFont> font = text_editor->get_font("font"); // reset source font size to default
+	Ref<DynamicFont> font = text_editor->get_font("font"); // Reset source font size to default.
 
 	if (font.is_valid()) {
 		EditorSettings::get_singleton()->set("interface/editor/code_font_size", 14);
@@ -886,31 +885,33 @@ bool CodeTextEditor::_add_font_size(int p_delta) {
 
 void CodeTextEditor::update_editor_settings() {
 
-	text_editor->set_auto_brace_completion(EditorSettings::get_singleton()->get("text_editor/completion/auto_brace_complete"));
-	text_editor->set_scroll_pass_end_of_file(EditorSettings::get_singleton()->get("text_editor/cursor/scroll_past_end_of_file"));
+	text_editor->set_syntax_coloring(EditorSettings::get_singleton()->get("text_editor/highlighting/syntax_highlighting"));
+	text_editor->set_highlight_all_occurrences(EditorSettings::get_singleton()->get("text_editor/highlighting/highlight_all_occurrences"));
+	text_editor->set_highlight_current_line(EditorSettings::get_singleton()->get("text_editor/highlighting/highlight_current_line"));
 	text_editor->set_indent_using_spaces(EditorSettings::get_singleton()->get("text_editor/indent/type"));
 	text_editor->set_indent_size(EditorSettings::get_singleton()->get("text_editor/indent/size"));
 	text_editor->set_auto_indent(EditorSettings::get_singleton()->get("text_editor/indent/auto_indent"));
 	text_editor->set_draw_tabs(EditorSettings::get_singleton()->get("text_editor/indent/draw_tabs"));
 	text_editor->set_draw_spaces(EditorSettings::get_singleton()->get("text_editor/indent/draw_spaces"));
-	text_editor->set_show_line_numbers(EditorSettings::get_singleton()->get("text_editor/line_numbers/show_line_numbers"));
-	text_editor->set_line_numbers_zero_padded(EditorSettings::get_singleton()->get("text_editor/line_numbers/line_numbers_zero_padded"));
-	text_editor->set_show_line_length_guideline(EditorSettings::get_singleton()->get("text_editor/line_numbers/show_line_length_guideline"));
-	text_editor->set_line_length_guideline_column(EditorSettings::get_singleton()->get("text_editor/line_numbers/line_length_guideline_column"));
-	text_editor->set_syntax_coloring(EditorSettings::get_singleton()->get("text_editor/highlighting/syntax_highlighting"));
-	text_editor->set_highlight_all_occurrences(EditorSettings::get_singleton()->get("text_editor/highlighting/highlight_all_occurrences"));
-	text_editor->set_highlight_current_line(EditorSettings::get_singleton()->get("text_editor/highlighting/highlight_current_line"));
+	text_editor->set_smooth_scroll_enabled(EditorSettings::get_singleton()->get("text_editor/navigation/smooth_scrolling"));
+	text_editor->set_v_scroll_speed(EditorSettings::get_singleton()->get("text_editor/navigation/v_scroll_speed"));
+	text_editor->set_draw_minimap(EditorSettings::get_singleton()->get("text_editor/navigation/show_minimap"));
+	text_editor->set_minimap_width(EditorSettings::get_singleton()->get("text_editor/navigation/minimap_width"));
+	text_editor->set_show_line_numbers(EditorSettings::get_singleton()->get("text_editor/appearance/show_line_numbers"));
+	text_editor->set_line_numbers_zero_padded(EditorSettings::get_singleton()->get("text_editor/appearance/line_numbers_zero_padded"));
+	text_editor->set_bookmark_gutter_enabled(EditorSettings::get_singleton()->get("text_editor/appearance/show_bookmark_gutter"));
+	text_editor->set_breakpoint_gutter_enabled(EditorSettings::get_singleton()->get("text_editor/appearance/show_breakpoint_gutter"));
+	text_editor->set_draw_info_gutter(EditorSettings::get_singleton()->get("text_editor/appearance/show_info_gutter"));
+	text_editor->set_hiding_enabled(EditorSettings::get_singleton()->get("text_editor/appearance/code_folding"));
+	text_editor->set_draw_fold_gutter(EditorSettings::get_singleton()->get("text_editor/appearance/code_folding"));
+	text_editor->set_wrap_enabled(EditorSettings::get_singleton()->get("text_editor/appearance/word_wrap"));
+	text_editor->set_show_line_length_guideline(EditorSettings::get_singleton()->get("text_editor/appearance/show_line_length_guideline"));
+	text_editor->set_line_length_guideline_column(EditorSettings::get_singleton()->get("text_editor/appearance/line_length_guideline_column"));
+	text_editor->set_scroll_pass_end_of_file(EditorSettings::get_singleton()->get("text_editor/cursor/scroll_past_end_of_file"));
+	text_editor->cursor_set_block_mode(EditorSettings::get_singleton()->get("text_editor/cursor/block_caret"));
 	text_editor->cursor_set_blink_enabled(EditorSettings::get_singleton()->get("text_editor/cursor/caret_blink"));
 	text_editor->cursor_set_blink_speed(EditorSettings::get_singleton()->get("text_editor/cursor/caret_blink_speed"));
-	text_editor->set_bookmark_gutter_enabled(EditorSettings::get_singleton()->get("text_editor/line_numbers/show_bookmark_gutter"));
-	text_editor->set_breakpoint_gutter_enabled(EditorSettings::get_singleton()->get("text_editor/line_numbers/show_breakpoint_gutter"));
-	text_editor->set_hiding_enabled(EditorSettings::get_singleton()->get("text_editor/line_numbers/code_folding"));
-	text_editor->set_draw_fold_gutter(EditorSettings::get_singleton()->get("text_editor/line_numbers/code_folding"));
-	text_editor->set_wrap_enabled(EditorSettings::get_singleton()->get("text_editor/line_numbers/word_wrap"));
-	text_editor->set_draw_info_gutter(EditorSettings::get_singleton()->get("text_editor/line_numbers/show_info_gutter"));
-	text_editor->cursor_set_block_mode(EditorSettings::get_singleton()->get("text_editor/cursor/block_caret"));
-	text_editor->set_smooth_scroll_enabled(EditorSettings::get_singleton()->get("text_editor/open_scripts/smooth_scrolling"));
-	text_editor->set_v_scroll_speed(EditorSettings::get_singleton()->get("text_editor/open_scripts/v_scroll_speed"));
+	text_editor->set_auto_brace_completion(EditorSettings::get_singleton()->get("text_editor/completion/auto_brace_complete"));
 }
 
 void CodeTextEditor::trim_trailing_whitespace() {
@@ -1261,7 +1262,7 @@ void CodeTextEditor::toggle_inline_comment(const String &delimiter) {
 		int col_to = text_editor->get_selection_to_column();
 		int cursor_pos = text_editor->cursor_get_column();
 
-		// Check if all lines in the selected block are commented
+		// Check if all lines in the selected block are commented.
 		bool is_commented = true;
 		for (int i = begin; i <= end; i++) {
 			if (!text_editor->get_line(i).begins_with(delimiter)) {
@@ -1456,14 +1457,14 @@ void CodeTextEditor::_on_settings_change() {
 
 	font_size = EditorSettings::get_singleton()->get("interface/editor/code_font_size");
 
-	// AUTO BRACE COMPLETION
+	// Auto brace completion.
 	text_editor->set_auto_brace_completion(
 			EDITOR_GET("text_editor/completion/auto_brace_complete"));
 
 	code_complete_timer->set_wait_time(
 			EDITOR_GET("text_editor/completion/code_complete_delay"));
 
-	// call hint settings
+	// Call hint settings.
 	text_editor->set_callhint_settings(
 			EDITOR_GET("text_editor/completion/put_callhint_tooltip_below_current_line"),
 			EDITOR_GET("text_editor/completion/callhint_tooltip_offset"));
