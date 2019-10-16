@@ -238,7 +238,7 @@ Error EditorExportPlatformJavaScript::export_project(const Ref<EditorExportPrese
 	unzFile pkg = unzOpen2(template_path.utf8().get_data(), &io);
 
 	if (!pkg) {
-
+        ERR_PRINTS(TTR("Could not open template for export:") + "\n" + template_path);
 		EditorNode::get_singleton()->show_warning(TTR("Could not open template for export:") + "\n" + template_path);
 		return ERR_FILE_NOT_FOUND;
 	}
